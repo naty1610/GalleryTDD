@@ -45,3 +45,18 @@ class GalleryTestCase(TestCase):
              "email": "test@test.com", "photo": "https://banner2.kisspng.com/20180331/czw/kisspng-computer-icons-user-profile-female-avatar-user-5abff416099122.7881303215225293020392.jpg", "educationLevel":"Pregrado", "profession":"Ingeniera de sistemas"}), content_type='application/json')
         current_data = json.loads(response.content)
         self.assertEqual(current_data[0]['fields']['username'], 'testUser')
+
+    def test_images_publics(self):
+        user_model = Usuario.objects.create(username="testUser", name="Test",
+                                            lastname="User", password="AnyPas#5", email="test@test.com",
+                                            photo="https://banner2.kisspng.com/20180331/czw/kisspng-computer-icons-user-profile-female-avatar-user-5abff416099122.7881303215225293020392.jpg",
+                                            educationLevel="Pregrado", profession="Ingeniera de sistemas")
+        Image.objects.create(name='nuevo', url='No', description='testPortafolio', type='jpg', profile='priv', user=user_model)
+        Image.objects.create(name='nuevo2', url='No', description='testPortafolio', type='jpg', profile='publ', user=user_model)
+        Image.objects.create(name='nuevo3', url='No', description='testPortafolio', type='jpg', profile='publ', user=user_model)
+        Image.objects.create(name='nuevo4', url='No', description='testPortafolio', type='jpg', profile='publ', user=user_model)
+
+        response = self.client.get('/gallery/publicPortfolio/' + str(user_model.id))
+        current_data = json.loads(response.content)
+
+        self.assertEqual(len(current_data), 3)
