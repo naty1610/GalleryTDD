@@ -28,3 +28,9 @@ def add_user_view(request):
         newUsuario.save()
 
     return HttpResponse(serializers.serialize("json", [newUsuario]))
+
+@csrf_exempt
+def portfolio_public_view(request, id):
+
+        portfolio_list = Image.objects.filter(user=id, profile='publ')
+        return HttpResponse(serializers.serialize("json", portfolio_list))
