@@ -73,3 +73,10 @@ class GalleryTestCase(TestCase):
         current_data = json.loads(response.content)
 
         self.assertEqual(current_data, 'testUser')
+
+    def test_add_user(self):
+        response = self.client.post('/gallery/editUser/', json.dumps(
+            {"username": "testUser", "name": "TestPrueba", "lastname": "UserPrueba", "password": "1234#P",
+             "email": "test@test.com", "photo": "https://banner2.kisspng.com/20180331/czw/kisspng-computer-icons-user-profile-female-avatar-user-5abff416099122.7881303215225293020392.jpg", "educationLevel":"Pregrado", "profession":"Ingeniera de sistemas"}), content_type='application/json')
+        current_data = json.loads(response.content)
+        self.assertEqual(current_data[0]['fields']['name'], 'TestPrueba')
