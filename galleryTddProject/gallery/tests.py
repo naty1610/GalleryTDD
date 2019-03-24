@@ -72,4 +72,4 @@ class GalleryTestCase(TestCase):
 
         current_data = json.loads(response.content)
 
-        self.assertEqual(current_data, 'test')
+        self.assertEqual(current_data, 'testUser')

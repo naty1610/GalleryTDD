@@ -1,6 +1,7 @@
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.core import serializers
 from .models import Image, Usuario
@@ -34,3 +35,18 @@ def portfolio_public_view(request, id):
 
         portfolio_list = Image.objects.filter(user=id, profile='publ')
         return HttpResponse(serializers.serialize("json", portfolio_list))
+
+@csrf_exempt
+def login_view(request):
+    if request.method == 'POST':
+        jsonUser = json.loads(request.body)
+        username = jsonUser['username']
+        password = jsonUser['password']
+        usuario = Usuario.objects.filter(username=username, password=password).first()
+        if usuario is not None:
+            message = username
+        else:
+            message = \
+                'FAIL'
+
+    return JsonResponse(message, safe=False)
