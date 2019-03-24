@@ -74,7 +74,12 @@ class GalleryTestCase(TestCase):
 
         self.assertEqual(current_data, 'testUser')
 
-    def test_add_user(self):
+    def test_modify_user(self):
+        user_model = Usuario.objects.create(username="testUser", name="Test",
+                                            lastname="User", password="AnyPas#5", email="test@test.com",
+                                            photo="https://banner2.kisspng.com/20180331/czw/kisspng-computer-icons-user-profile-female-avatar-user-5abff416099122.7881303215225293020392.jpg",
+                                            educationLevel="Pregrado", profession="Ingeniera de sistemas")
+
         response = self.client.post('/gallery/editUser/', json.dumps(
             {"username": "testUser", "name": "TestPrueba", "lastname": "UserPrueba", "password": "1234#P",
              "email": "test@test.com", "photo": "https://banner2.kisspng.com/20180331/czw/kisspng-computer-icons-user-profile-female-avatar-user-5abff416099122.7881303215225293020392.jpg", "educationLevel":"Pregrado", "profession":"Ingeniera de sistemas"}), content_type='application/json')

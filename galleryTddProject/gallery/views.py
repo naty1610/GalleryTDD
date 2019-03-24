@@ -50,3 +50,18 @@ def login_view(request):
                 'FAIL'
 
     return JsonResponse(message, safe=False)
+
+@csrf_exempt
+def edit_user(request):
+    if request.method == 'POST':
+        json_usuario = json.loads(request.body)
+        user_edit = Usuario.objects.get(username=json_usuario['username'])
+        user_edit.password = json_usuario['password']
+        user_edit.name = json_usuario['name']
+        user_edit.lastname = json_usuario['lastname']
+        user_edit.email = json_usuario['email']
+        user_edit.photo = json_usuario['photo']
+        user_edit.educationLevel = json_usuario['educationLevel']
+        user_edit.profession = json_usuario['profession']
+        user_edit.save()
+        return HttpResponse(serializers.serialize("json", [user_edit]))
