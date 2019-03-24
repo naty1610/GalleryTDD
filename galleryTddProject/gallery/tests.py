@@ -1,8 +1,7 @@
-from django.contrib.auth.models import User
 from django.test import TestCase, Client
 
 # Create your tests here.
-from .models import Image
+from .models import Image, Usuario
 import json
 
 # Create your tests here.
@@ -12,3 +11,16 @@ class GalleryTestCase(TestCase):
         url = '/gallery/'
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, 200)
+
+    def test_count_images_list(self):
+        user_model = Usuario.objects.create(username="testUser", name="Test",
+                                            lastname="User", password="AnyPas#5", email="test@test.com",
+                                            photo="https://banner2.kisspng.com/20180331/czw/kisspng-computer-icons-user-profile-female-avatar-user-5abff416099122.7881303215225293020392.jpg",
+                                            educationLevel="Pregrado", profession="Ingeniera de sistemas")
+        Image.objects.create(name='nuevo', url='No', description='testImage', type='jpg', user=user_model)
+        Image.objects.create(name='nuevo2', url='No', description='testImage', type='jpg', user=user_model)
+
+        response=self.client.get('/gallery/')
+        current_data=json.loads(response.content)
+
+        self.assertEqual(len(current_data), 2)
